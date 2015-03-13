@@ -1,0 +1,15 @@
+*** Variables ***
+@{Playlist_tab}    css=[ng-class*="playlists"][ng-class*='selected']
+@{AddPlaylistButton}    css=.playlist-list-entry-first-thumbnail
+@{GenerateAndViewPlaylist}    css=.playlist_button[value="Generate & View Playlist"]
+@{AddMedia}       xpath=.//*[@id='add_external_video']
+@{AddSlide}       xpath=.//*[@id='add_slide']
+@{CancelPlaylist}    css=.playlist_cancel
+@{SignInButton}    xpath=//*[@id='signInButton']
+@{TitleIsRequired}    xpath=.//li[contains(text(),'A title is required to create a playlist.')]
+@{DescriptionIsRequired}    xpath=.//li[contains(text(),'A description is required to create a playlist.')]
+@{PieceOfMediaIsRequired}    xpath=.//li[contains(text(),'At least one piece of content \ is required to create a playlist.')]
+@{Title}          xpath=.//*[@id='playlist_name']
+@{Description}    xpath=.//*[@id='playlist_description']
+@{MyMedia}        css=[ng-class*="myMedia"]
+@{SaveMedia}      css=.modal-actions > a[id=save-external-video]

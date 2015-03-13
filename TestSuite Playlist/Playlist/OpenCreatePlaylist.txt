@@ -1,0 +1,31 @@
+*** Settings ***
+Resource          resources/keywords.txt
+
+*** Test Cases ***
+SignInToRelay
+    SignInToRelay    radu.amaritei@geminisols.com    radu1234
+
+VerifyCreatePlaylistPage
+    [Documentation]    Open create playlist /
+    ...    Verify elemnets on Create Playlist /
+    ...    Verify warnings
+    Open Create Playlist
+    Verify elements on create Playlist page
+
+VerifyCreatePlaylistWarnings
+    Verify warnings
+
+CancelCreatePlaylist
+    Click Element    @{CancelPlaylist}
+    Wait Until Element Is Visible    css=.profile-details-info-name
+    Wait Until Element Is Visible    @{Playlist_tab}
+    Wait Until Element Is Visible    @{AddPlaylistButton}    timeout=10
+
+GenerateCreatePlaylist
+    Open Create Playlist
+    Input Text    @{Title}    text=Playlist01
+    Input Text    @{Description}    text=Some description is added ...
+    Click Element    @{AddMedia}
+    Wait Until Element Is Visible    css=#external_video
+    Wait Until Element Is Visible    @{MyMedia}    timeout=10
+    Element Should Be Disabled    @{SaveMedia}

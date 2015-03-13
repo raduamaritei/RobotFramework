@@ -1,0 +1,57 @@
+*** Settings ***
+Library           Selenium2Library
+Library           Screenshot
+Resource          locators.txt
+
+*** Keywords ***
+Login
+    [Arguments]    ${username}    ${password}
+    Wait Until Element Is Visible    id=Email
+    Input Text    xpath=//*[@id='Email']    ${username}
+    Input Password    xpath=//*[@id='password-hidden']    ${password}
+    Click Button    @{SignInButton}
+    Wait Until Element Is Visible    css=.profile-details-info-name
+    Take Screenshot
+
+Open Create Playlist
+    [Documentation]    Opens Create Playlist page.
+    Wait Until Element Is Visible    @{Playlist_tab}    timeout=30
+    Click Element    @{Playlist_tab}
+    Wait Until Element Is Visible    @{AddPlaylistButton}    timeout=30    error=Add playlist button is not displayed
+    Click Element    @{AddPlaylistButton}
+    Wait Until Element Is Visible    css=.relay_title    timeout=30    error=Create Playlist page does not load
+
+Verify elements on create Playlist page
+    Element Should Be Visible    id=playlist_name    message=Title is not present
+    Element Should Be Visible    id=playlist_description    message=Description is not present
+    Element Should Contain    css=.relay_label[style="display:inline-block;"]    expected=Playlist Media
+    Element Should Be Visible    @{AddMedia}
+    Element Should Be Visible    @{AddSlide}
+    Element Should Be Visible    @{GenerateAndViewPlaylist}
+    Element Should Be Visible    @{CancelPlaylist}
+
+Verify warnings
+    Click Element    @{GenerateAndViewPlaylist}
+    Element Should Be Visible    xpath=.//*[@id='errors_list_container']    message=Warning container is displayed
+    Element Should Be Visible    @{TitleIsRequired}    message=A title is required to create a playlist.
+    Element Should Be Visible    @{DescriptionIsRequired}    message=A description is required to create a playlist.
+    Element Should Be Visible    @{PieceOfMediaIsRequired}    message=At least one piece of content is required to create a playlist.
+    Input Text    @{Title}    text=Playlist01
+    Click Element    @{GenerateAndViewPlaylist}
+    Element Should Not Be Visible    @{TitleIsRequired}    message=A title is required to create a playlist.
+    Element Should Be Visible    @{PieceOfMediaIsRequired}    message=At least one piece of content is required to create a playlist.
+    Input Text    @{Description}    text=Some description is added ...
+    Click Element    @{GenerateAndViewPlaylist}
+    Element Should Be Visible    @{PieceOfMediaIsRequired}    message=At least one piece of content is required to create a playlist.
+
+OpenRelayPage
+    Open Browser    https://geminitest.techsmithrelay.com    desired_capabilities="acceptSslCerts:True"
+    Wait Until Page Contains Element    css=.site-header-sign-in.t-btn-sign-in
+
+SignInToRelay
+    [Arguments]    ${username}    ${password}
+    OpenRelayPage
+    Click Element    css=.site-header-sign-in.t-btn-sign-in
+    Title Should Be    TechSmith - Sign In
+    Click Element    xpath=.//*[@id='signin-primary']/div/div[4]/a[4]
+    Login    radu.amaritei@geminisols.com    radu1234
